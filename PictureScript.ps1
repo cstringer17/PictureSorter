@@ -1,8 +1,6 @@
 ﻿$mainDir = (Get-Location)
 $CurrentDepartment = Read-Host -Prompt 'Input Current Department'
     
-
-
 $choices = [System.Management.Automation.Host.ChoiceDescription[]] @("&YES","&NO")
 while ( $true ) {
 
@@ -27,20 +25,22 @@ while ( $true ) {
     cd $mainDir
 
     $filename = Read-Host -Prompt 'Input current SAP ID Number'
+    Write-Warning "MAX 5 PICTURES PER DEVICE"
     Write-Warning "Have you taken all pictures of the device" -WarningAction Inquire
     
-
-
-
-    $files = Get-ChildItem *.jpg
     $counter = 0
 
 
+    $files = Get-ChildItem *.jpg
+    
     foreach ($file in $files) {
         $counter++
         Write-Output $file.FullName
-        Move-Item $file -Destination "$CurrentDepartment\$CurrentLab\$filename_$counter.jpg"
+        $des = "$CurrentDepartment\$CurrentLab\$filename["  + $counter + "].jpg"
+        Move-Item $file -Destination $des
     }
+
+    $counter = 0
 
     Write-Host "Files moved and renamed"
     $choice = $Host.UI.PromptForChoice("Repeat the script?","",$choices,0)
